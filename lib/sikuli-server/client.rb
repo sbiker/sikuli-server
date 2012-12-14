@@ -5,6 +5,10 @@ module SikuliServer
       launch_server
     end
 
+    def server_url
+      "http://localhost:7114"
+    end
+
     def app_focus title
     end
 
@@ -14,13 +18,21 @@ module SikuliServer
       require "fileutils"
       server_path = File.expand_path(File.join(File.dirname(__FILE__), "../../SikuliServer"))
       FileUtils.mkdir_p File.join(server_path, "bin")
-      puts server_path
       Dir.chdir server_path do
-        system "javac -d bin -sourcepath src -cp lib/gson-2.2.2.jar src/*.java"
+        sikuli_script_jar = [
+          "/Applications/Sikuli-IDE.app/Contents/Resources/Java/sikuli-script.jar"
+        ].find {|f| File.exist?(f)}
+
+        puts sikuli_script_jar
+        system "javac -d bin -sourcepath src -cp \"lib/gson-2.2.2.jar:#{sikuli_script_jar}\" src/*.java"
         require "childprocess"
-        @process = ChildProcess.build("java", "-cp", "bin:lib/gson-2.2.2.jar", "Main")
+        @process = ChildProcess.build("java", "-cp", "bin:lib/gson-2.2.2.jar:#{sikuli_script_jar}", "Main")
         @process.io.inherit!
         @process.start
+        loop do
+          response = HTTParty.get("#{server_url}/version").body rescue nil
+          break if response
+        end
         at_exit do
           @process.stop
         end
