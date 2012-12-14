@@ -1,5 +1,3 @@
-module Sikuli
-  module Server
-    VERSION = "0.0.1"
-  end
+module SikuliServer
+  VERSION = "0.0.1"
 end

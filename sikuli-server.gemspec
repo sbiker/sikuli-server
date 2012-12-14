@@ -5,7 +5,7 @@ require 'sikuli-server/version'
 
 Gem::Specification.new do |gem|
   gem.name          = "sikuli-server"
-  gem.version       = Sikuli::Server::VERSION
+  gem.version       = SikuliServer::VERSION
   gem.authors       = ["Andrew Vos"]
   gem.email         = ["andrew.vos@gmail.com"]
   gem.description   = %q{}
