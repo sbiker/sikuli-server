@@ -23,7 +23,6 @@ module SikuliServer
           "/Applications/Sikuli-IDE.app/Contents/Resources/Java/sikuli-script.jar"
         ].find {|f| File.exist?(f)}
 
-        puts sikuli_script_jar
         system "javac -d bin -sourcepath src -cp \"lib/gson-2.2.2.jar:#{sikuli_script_jar}\" src/*.java"
         require "childprocess"
         @process = ChildProcess.build("java", "-cp", "bin:lib/gson-2.2.2.jar:#{sikuli_script_jar}", "Main")
