@@ -17,7 +17,13 @@ module SikuliServer
       puts server_path
       Dir.chdir server_path do
         system "javac -d bin -sourcepath src -cp lib/gson-2.2.2.jar src/*.java"
-        system "java -cp bin:lib/gson-2.2.2.jar Main"
+        require "childprocess"
+        @process = ChildProcess.build("java", "-cp", "bin:lib/gson-2.2.2.jar", "Main")
+        @process.io.inherit!
+        @process.start
+        at_exit do
+          @process.stop
+        end
       end
     end
 
