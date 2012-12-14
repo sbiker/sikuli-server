@@ -8,13 +8,17 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.sikuli.script.*;
+
 public class SikuliServer extends NanoHTTPD
 {
   private boolean serverRunning = false;
+  private Screen screen;
 
   public SikuliServer() throws IOException
   {
     super(7114, new File("."));
+    screen = new Screen();
     serverRunning = true;
   }
 
@@ -25,6 +29,18 @@ public class SikuliServer extends NanoHTTPD
 
   public Response serve(String uri, String method, Properties header, Properties params, Properties files )
   {
+    if (uri.endsWith("/execute"))
+    {
+      String methodName = params.getProperty("method");
+      String[] parameters = new Gson().fromJson(params.getProperty("parameters"), String[].class);
+      if (methodName.equals("focus"))
+      {
+        App app = new App(parameters[0]);
+        app.focus();
+        return new NanoHTTPD.Response(HTTP_OK, MIME_HTML, methodName);
+      }
+    }
+
     return new NanoHTTPD.Response(HTTP_OK, MIME_HTML, "sikuli-server");
   }
 

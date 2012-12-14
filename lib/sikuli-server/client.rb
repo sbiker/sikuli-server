@@ -1,3 +1,5 @@
+require "json"
+
 module SikuliServer
   class Client
     def initialize
@@ -9,7 +11,11 @@ module SikuliServer
       "http://localhost:7114"
     end
 
-    def app_focus title
+    def focus title
+      HTTParty.post("#{server_url}/execute", :body => {
+        :method     => "focus",
+        :parameters => [title].to_json
+      }).body
     end
 
     private
