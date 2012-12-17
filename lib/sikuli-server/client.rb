@@ -22,6 +22,8 @@ module SikuliServer
 
     def launch_server
       require "fileutils"
+      require "childprocess"
+
       server_path = File.expand_path(File.join(File.dirname(__FILE__), "../../SikuliServer"))
       FileUtils.mkdir_p File.join(server_path, "bin")
       Dir.chdir server_path do
@@ -29,8 +31,11 @@ module SikuliServer
           "/Applications/Sikuli-IDE.app/Contents/Resources/Java/sikuli-script.jar"
         ].find {|f| File.exist?(f)}
 
-        system "javac -d bin -sourcepath src -cp \"lib/gson-2.2.2.jar:#{sikuli_script_jar}\" src/*.java"
-        require "childprocess"
+        compile_output = `javac -d bin -classpath lib/gson-2.2.2.jar:#{sikuli_script_jar} src/*.java`
+        if $?.exitstatus != 0
+          raise compile_output
+        end
+
         @process = ChildProcess.build("java", "-cp", "bin:lib/gson-2.2.2.jar:#{sikuli_script_jar}", "Main")
         @process.io.inherit!
         @process.start
