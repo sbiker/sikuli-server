@@ -19,4 +19,5 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "httparty"
   gem.add_dependency "childprocess"
+  gem.add_dependency "rubyzip"
 end
