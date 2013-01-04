@@ -18,6 +18,13 @@ module SikuliServer
       }).body
     end
 
+    def click image_path
+      HTTParty.post("#{server_url}/execute", :body => {
+        :method     => "click",
+        :parameters => [image_path].to_json
+      }).body
+    end
+
     private
 
     def launch_server

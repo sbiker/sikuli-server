@@ -27,7 +27,7 @@ public class SikuliServer extends NanoHTTPD
     return serverRunning;
   }
 
-  public Response serve(String uri, String method, Properties header, Properties params, Properties files )
+  public Response serve(String uri, String method, Properties header, Properties params, Properties files)
   {
     if (uri.endsWith("/execute"))
     {
@@ -37,6 +37,17 @@ public class SikuliServer extends NanoHTTPD
       {
         App app = new App(parameters[0]);
         app.focus();
+        return new NanoHTTPD.Response(HTTP_OK, MIME_HTML, methodName);
+      }
+
+      if (methodName.equals("click"))
+      {
+        Screen screen = new Screen();
+        try {
+          screen.click(parameters[0], 0);
+        } catch (org.sikuli.script.FindFailed exception) {
+          return showException(exception);
+        }
         return new NanoHTTPD.Response(HTTP_OK, MIME_HTML, methodName);
       }
     }
