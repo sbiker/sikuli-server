@@ -2,6 +2,10 @@
 
 TODO: Write a gem description
 
+## Dependencies
+
+You'll need to have installed the [Sikuli-IDE](http://www.sikuli.org/download.html) in your Applications folder (for MAC)
+
 ## Installation
 
 Add this line to your application's Gemfile:

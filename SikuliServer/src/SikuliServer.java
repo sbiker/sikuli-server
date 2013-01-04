@@ -42,7 +42,6 @@ public class SikuliServer extends NanoHTTPD
 
       if (methodName.equals("click"))
       {
-        Screen screen = new Screen();
         try {
           screen.click(parameters[0], 0);
         } catch (org.sikuli.script.FindFailed exception) {
